@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/sample_racer/levels/garage.unity
+    path: Assets/Scenes/garage.unity
     guid: ba4079f050246d64ea46cf66b4cf5357
   m_configObjects: {}

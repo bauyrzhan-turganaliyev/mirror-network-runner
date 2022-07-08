@@ -1154,6 +1154,7 @@ namespace Mirror
             }
 
             OnServerAddPlayer(conn);
+            
         }
 
         void OnClientConnectInternal()

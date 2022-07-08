@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using System;
 
 namespace nmRunner
 {
@@ -14,15 +15,16 @@ namespace nmRunner
         [SerializeField] private float _speed = 12f;
         [SerializeField] private float _turnSmoothTime = 0.1f;
 
-
         [SerializeField] private float _gravity = -9.81f;
         [SerializeField] private float _groundDistance = 0.4f;
         [SerializeField] private float _jumpHeight = 3f;
         [SerializeField] private LayerMask _groundMask;
 
+        private Dash _dash;
         private Vector3 _velocity;
         private Vector3 _moveDir;
         private bool _isGrounded;
+        private bool _isControl;
 
         private float _turnSmoothVelocity;
 
@@ -42,9 +44,24 @@ namespace nmRunner
                 return _moveDir;
             }
         }
-        private void Start()
+        public bool IsGrounded
         {
+            get
+            {
+                return _isGrounded;
+            }
+        }
+        public void Init(Dash dash)
+        {
+            _dash = dash;
+
+            _dash.Init(this);
+
+            _dash.OnDash += OnDashing;
+
             Cursor.lockState = CursorLockMode.Locked;
+
+            _isControl = true;
 
             if (!isLocalPlayer)
             {
@@ -52,8 +69,15 @@ namespace nmRunner
             }
         }
 
+        private void OnDashing(bool flag)
+        {
+            _isControl = !flag;
+        }
+
         void Update()
         {
+            if (!_isControl) return;
+
             // If we are not the main client, do not run this method
             if (!isLocalPlayer) return;
             _isGrounded = Physics.CheckSphere(_groundCheck.position, _groundDistance, _groundMask);
